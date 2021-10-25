@@ -1,4 +1,7 @@
 # hyp-bootstrap
+
+Host you own private hyperswarm DHT boostrap nodes as a nodejs daemon
+
 > this for the new api `@hyperswarm/dht/@next`
 
 # Usage
@@ -19,4 +22,4 @@ Or just re-run it with the ports
 ```bash
 npm start -- --ports .... ....
 ```
-> check the generated `config.json` file to see the ports, it's currently listening on
+> You check the generated `config.json` file to see the ports, it's currently listening on
