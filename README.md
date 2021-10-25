@@ -24,9 +24,7 @@ dht-bootstrap --ports 10001 10002
 
 ## To change ports:
 
-You can edit the `ports` in the generated `config.json` file and run `npm start`
-
-Or just re-run it with the ports
+Just re-run with the new ports
 
 ```bash
 dht-bootstrap --ports .... ....
