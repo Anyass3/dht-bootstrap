@@ -1,25 +1,45 @@
-# hyp-bootstrap
+# dht-bootstrap
 
 Host you own private hyperswarm DHT boostrap nodes as a nodejs daemon
 
-> this for the new api `@hyperswarm/dht/@next`
+> This for the new api `@hyperswarm/dht@next`
 
-# Usage
+# Installation
+
 ```bash
-# atlest 2 ports
-npm start -- --ports 10001 10002
+npm install -g dht-bootstrap
 ```
 
-This run the dht node to listen on `10001, 10002`. This is the default
+# Usage
 
-> If you run it again it will close the previous node and then start the new node
+> Atleast 2 ports
+
+```bash
+dht-bootstrap --ports 10001 10002
+```
+
+> For now, the daemon process only allows one instance.
+
+> If you run another instance it will close the previous instance before starting the new instance.
 
 ## To change ports:
 
-You can edit the `ports` in the generated `config.json` file and run `npm start` 
+You can edit the `ports` in the generated `config.json` file and run `npm start`
 
 Or just re-run it with the ports
+
 ```bash
-npm start -- --ports .... ....
+dht-bootstrap --ports .... ....
 ```
-> You check the generated `config.json` file to see the ports, it's currently listening on
+
+## To check status
+
+```bash
+dht-bootstrap --status
+```
+
+## Help
+
+```bash
+dht-bootstrap --help
+```

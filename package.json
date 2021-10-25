@@ -1,15 +1,22 @@
 {
-  "name": "hyp-bootstrap",
-  "version": "1.0.0",
-  "description": "",
-  "main": "bin.js",
+  "name": "dht-bootstrap",
+  "version": "0.0.2",
+  "description": "Host you own private hyperswarm DHT boostrap nodes as a nodejs daemon",
+  "main": "index.js",
+  "bin": "bin",
   "scripts": {
-    "start": "chmod +x ./bin.js && ./bin.js"
+    "start": "chmod +x ./bin && ./bin",
+    "test": "node test.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "dht",
+    "hyperswarm",
+    "bootstrap"
+  ],
+  "author": "Abdoulie Nyass",
   "license": "ISC",
   "dependencies": {
-    "@hyperswarm/dht": "^5.0.1"
+    "@hyperswarm/dht": "^5.0.1",
+    "commander": "^8.3.0"
   }
 }
