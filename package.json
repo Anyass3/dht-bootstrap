@@ -1,0 +1,16 @@
+{
+  "name": "hyp-bootstrap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin.js",
+  "scripts": {
+    "start": "chmod +x ./bin.js && ./bin.js && cat config.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hyperswarm/dht": "^5.0.1"
+  }
+}
