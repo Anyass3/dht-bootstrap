@@ -1,6 +1,6 @@
 {
   "name": "dht-bootstrap",
-  "version": "0.0.3",
+  "version": "0.0.31",
   "description": "Host you own private hyperswarm DHT boostrap nodes as a nodejs daemon",
   "main": "index.js",
   "bin": "bin",
@@ -16,7 +16,7 @@
   "author": "Abdoulie Nyass",
   "license": "ISC",
   "dependencies": {
-    "@hyperswarm/dht": "^5.0.1",
+    "@hyperswarm/dht": "^5.0.6",
     "commander": "^8.3.0"
   }
 }
