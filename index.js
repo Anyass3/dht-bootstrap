@@ -1,8 +1,8 @@
 const DHT = require('@hyperswarm/dht');
 
-const getBootstrap = ({ address, port }) => ({ host: address, port });
+module.exports = async (ports, host) => {
+  const getBootstrap = ({ address, port }) => ({ host: host || address, port });
 
-module.exports = async (ports) => {
   if (!ports?.length) {
     ports = [null, null, null];
   }

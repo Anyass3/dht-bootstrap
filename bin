@@ -20,6 +20,19 @@ const isActive = (pid) => {
   }
 };
 
+let status = {
+  host: '0.0.0.0',
+  ports: [],
+  env: { PID: null, active: false },
+};
+
+if (!fs.existsSync(statusPath)) {
+  fs.writeFileSync(statusPath, JSON.stringify(status, undefined, 2));
+} else {
+  status = JSON.parse(fs.readFileSync(statusPath, { encoding: 'utf-8' }));
+  status.env.active = isActive(status.env.PID);
+}
+
 const child = (exe, args, env) => {
   const child = child_process.spawn(exe, args, {
     detached: true,
@@ -46,17 +59,19 @@ const daemon = () => {
   status.env.PID = pid;
   status.env.active = true;
   fs.writeFileSync(statusPath, JSON.stringify(status, undefined, 2));
+  // if we are in daemon mode don't kill process
+  // if (!process.env.__daemon) process.exit();
 };
-
+let processedFirstPort = false;
 function processPorts(port, ports) {
+  if (!processedFirstPort && port) ports = [];
   if (!port.match(/^[0-9]+$/))
     throw new InvalidArgumentError('Some port(s) seem to contain non-numbers.');
   port = parseInt(port);
   if (isNaN(port)) throw new InvalidArgumentError('Some port(s) are not numbers.');
-
+  processedFirstPort = true;
   return ports.concat([port]);
 }
-
 program
   .version(pkg.version)
   .description(pkg.description)
@@ -64,28 +79,21 @@ program
     'after',
     `
   Examples:
-    $ dht-bootstrap  # for default or ports in status.json
-    $ dht-bootstrap --ports 49737 49738
-    $ dht-bootstrap --ports 10001 10002 12234`
+    $ dht-bootstrap  # for default(random) or ports in status.json
+    $ dht-bootstrap --ports 49737 49738 --host example.com
+    $ dht-bootstrap --ports 10001 10002 12234 --host 127.0.0.1`
   )
-  .option('-p, --ports [port...]', 'ports to listen on', processPorts, [])
+  .option('-p, --ports [port...]', 'ports to listen on - atleast 2', processPorts, status.ports)
+  .option(
+    '-h, --host <host>',
+    `IP(local|external) or (sub)domain of your device, to use in other devices(NOT "0.0.0.0" OR "127.0.0.1")`,
+    status.host
+  )
   .option('-s, --status', 'displays status')
   .option('-k, --kill', 'kills currently active bootstrap node');
 program.parse();
 
 const options = program.opts();
-
-let status = {
-  ports: options.ports,
-  env: { PID: null, active: false },
-};
-
-if (!fs.existsSync(statusPath)) {
-  fs.writeFileSync(statusPath, JSON.stringify(status, undefined, 2));
-} else {
-  status = JSON.parse(fs.readFileSync(statusPath, { encoding: 'utf-8' }));
-  status.env.active = isActive(status.env.PID);
-}
 
 if (options.kill) {
   if (status.env.active) {
@@ -96,7 +104,7 @@ if (options.kill) {
 }
 
 if (options.status) {
-  console.log(status);
+  console.log('\n', status, '\n');
   return;
 }
 
@@ -106,21 +114,19 @@ if (options.ports.length & (options.ports.length < 2)) {
 
 if (options.ports.length) {
   status.ports = options.ports;
+  status.host = options.host;
   fs.writeFileSync(statusPath, JSON.stringify(status, undefined, 2));
 }
 
 daemon(); //starts the daemon
 (async () => {
-  const bootstraps = await bootstrap(status.ports);
+  const bootstraps = await bootstrap(status.ports, options.host);
 
   status.ports = bootstraps.map((bootstrap) => bootstrap.port);
+
   fs.writeFileSync(statusPath, JSON.stringify(status, undefined, 2));
 
-  console.log('\nBootstrap nodes listening on:\n');
-  for (const bootstrap of bootstraps) {
-    console.log('\t', bootstrap);
-  }
-  console.log('\n');
+  console.log('\nlistening on:\n\t', bootstraps, '\n');
   // if we are in daemon mode don't kill process
   if (!process.env.__daemon) process.exit();
 })();
