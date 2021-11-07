@@ -12,11 +12,9 @@ npm install -g dht-bootstrap
 
 # Usage
 
-```bash
-dht-bootstrap --help
 ```
+$ dht-bootstrap --help
 
-```
 Usage: dht-bootstrap [options]
 
 Host you own private hyperswarm DHT boostrap nodes as a nodejs daemon
@@ -42,10 +40,8 @@ Options:
 
 ## To change ports:
 
-just re-run it with the ports
+just re-run it with the new ports
 
 ```bash
 dht-bootstrap --ports .... ....
 ```
-
-OR You can edit the `ports` in the generated `status.json` file and run `npm start`
